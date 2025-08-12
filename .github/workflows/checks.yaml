@@ -1,0 +1,55 @@
+name: Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  Checks:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+          disable-telemetry: true
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Go environment
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          cache: true
+          go-version-file: go.mod
+          cache-dependency-path: '**/go.sum'
+
+# Removed go version check as it's specific to the original repo
+
+      - name: Build all
+        run: make all
+
+      - name: Test
+        run: make test
+
+# Coverage reporting removed for now - can be added later if needed
+
+      # If enterprisecontractpolicy_types.go is updated without a corresponding change to the crd
+      # an uncommitted change can show.
+      - name: Check for uncommitted changes
+        run: |
+          if ! git diff --exit-code -s; then
+            for f in $(git diff --exit-code --name-only); do
+              echo "::error file=$f,line=1,col=1,endColumn=1::File was modified in build"
+              echo -e "\033[1;33mHint:\033[0m Maybe you need to run \033[1;32mmake all\033[0m"
+            done
+            exit 1
+          fi

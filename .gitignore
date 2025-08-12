@@ -1,0 +1,23 @@
+# Build outputs
+dist/
+*.out
+
+# Go module cache
+go.sum.backup
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated documentation
+docs/modules/ROOT/pages/reference.adoc
+
+# Test coverage reports
+*_cover.out
+cover.out

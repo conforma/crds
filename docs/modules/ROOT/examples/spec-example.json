@@ -1,0 +1,20 @@
+{
+  "description": "ACME & co policy",
+  "sources": [
+    {
+      "name": "simple",
+      "policy": [
+        "git::https://github.com/acme/ec-policy.git//policy?ref=prod"
+      ],
+      "data": [
+        "git::https://github.com/acme/ec-policy.git//data?ref=prod"
+      ]
+    }
+  ],
+  "configuration": {
+    "exclude": [
+      "friday_policy",
+      "room_temperature"
+    ]
+  }
+}

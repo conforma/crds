@@ -1,0 +1,16 @@
+domain: redhat.com
+layout:
+- go.kubebuilder.io/v3
+projectName: crds
+repo: github.com/conforma/crds
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: false
+  domain: redhat.com
+  group: appstudio
+  kind: EnterpriseContractPolicy
+  path: github.com/conforma/crds/api/v1alpha1
+  version: v1alpha1
+version: "3"
