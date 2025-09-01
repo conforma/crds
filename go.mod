@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/conforma/crds/api v0.0.0
-	k8s.io/apimachinery v0.29.11
+	k8s.io/apimachinery v0.29.15
 	sigs.k8s.io/yaml v1.4.0
 )
 
@@ -19,7 +19,7 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	k8s.io/apiextensions-apiserver v0.29.11 // indirect
+	k8s.io/apiextensions-apiserver v0.29.15 // indirect
 	k8s.io/klog/v2 v2.110.1 // indirect
 	k8s.io/utils v0.0.0-20230726121419-3b25d923346b // indirect
 	sigs.k8s.io/controller-runtime v0.17.6 // indirect
