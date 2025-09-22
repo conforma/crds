@@ -42,7 +42,7 @@ Please ensure you've provided the following:
     The file will be titled schema.json
   * A repository for the Go source file containing the struct used in schema creation."
   * The path to the directory containing the Go source file which contains the struct used for schema creation.
-    Example: go run schema/export.go /tmp/enterprise-contract-controller github.com/enterprise-contract/enterprise-contract-controller ./api/v1alpha1/
+    Example: go run schema/export.go /tmp/conforma-crds github.com/conforma/crds ./api/v1alpha1/
 
 `)
 		os.Exit(1)
