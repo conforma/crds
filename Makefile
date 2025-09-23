@@ -1,5 +1,4 @@
-# CRDs Makefile - Enterprise Contract Policy CRDs
-# Extracted from enterprise-contract-controller repository
+# CRDs Makefile - Conforma CRDs
 
 ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
