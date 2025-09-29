@@ -34,7 +34,7 @@ include::example$spec-example.json[]
 ----
 
 Consult the
-xref:reference.adoc#k8s-api-github-com-conforma-crds-api-v1alpha1-enterprisecontractpolicyspec[the
+xref:cli:ROOT:reference.adoc#k8s-api-github-com-conforma-crds-api-v1alpha1-enterprisecontractpolicyspec[the
 EnterpriseContractPolicySpec reference] documentation for details on the
 structure of this document.
 
