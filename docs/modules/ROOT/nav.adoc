@@ -1,2 +1,2 @@
 * xref:index.adoc[About Conforma Configuration]
-* xref:reference.adoc[Reference]
+* xref:cli:ROOT:reference.adoc[Reference]
