@@ -396,6 +396,109 @@ func TestReferenceField(t *testing.T) {
 	}
 }
 
+func TestVolatileCriteriaMutualExclusivity(t *testing.T) {
+	tests := []struct {
+		name           string
+		imageUrl       string
+		imageDigest    string
+		imageRef       string
+		componentNames []string
+		wantValid      bool
+	}{
+		// Valid cases - only one field set
+		{"Only imageUrl", "quay.io/org/repo", "", "", nil, true},
+		{"Only imageDigest", "", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", "", nil, true},
+		{"Only imageRef", "", "", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", nil, true},
+		{"Only componentNames", "", "", "", []string{"component1"}, true},
+		{"No fields set", "", "", "", nil, true},
+
+		// Invalid cases - multiple fields set
+		{"imageUrl and imageDigest", "quay.io/org/repo", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", "", nil, false},
+		{"imageUrl and imageRef", "quay.io/org/repo", "", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", nil, false},
+		{"imageUrl and componentNames", "quay.io/org/repo", "", "", []string{"component1"}, false},
+		{"imageDigest and imageRef", "", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", "sha256:1f88f9fb4543eadf97afcbd417c258fdf1a02dd000a36e39e7e4649d1b083b4e", nil, false},
+		{"imageDigest and componentNames", "", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", "", []string{"component1"}, false},
+		{"imageRef and componentNames", "", "", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", []string{"component1"}, false},
+		{"Three fields set", "quay.io/org/repo", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", "", []string{"component1"}, false},
+		{"All fields set", "quay.io/org/repo", "sha256:cfe1335814d92eabecfe9802f13298539caa7bbd0a13b61f320dc45bdded473d", "sha256:1f88f9fb4543eadf97afcbd417c258fdf1a02dd000a36e39e7e4649d1b083b4e", []string{"component1"}, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Create a CRD validation schema
+			crd := v1.CustomResourceDefinition{}
+			bytes, err := os.ReadFile("../../config/crd/bases/appstudio.redhat.com_enterprisecontractpolicies.yaml")
+			if err != nil {
+				t.Fatalf("unexpected error reading CRD: %s", err)
+			}
+			if err := yaml.Unmarshal(bytes, &crd); err != nil {
+				t.Fatalf("unexpected error when decoding schema: %s", err)
+			}
+
+			crdv := apiextensions.CustomResourceValidation{}
+			if err := v1.Convert_v1_CustomResourceValidation_To_apiextensions_CustomResourceValidation(crd.Spec.Versions[0].Schema, &crdv, nil); err != nil {
+				t.Fatalf("failed in CRD validation conversion: %s", err)
+			}
+
+			s, err := schema.NewStructural(crdv.OpenAPIV3Schema)
+			if err != nil {
+				t.Fatalf("unexpected error when creating structural: %s", err)
+			}
+
+			validator := validation.NewSchemaValidatorFromOpenAPI(s.ToKubeOpenAPI())
+
+			// Build the volatile criteria map
+			criteria := map[string]interface{}{
+				"value": "test-rule",
+			}
+			if tt.imageUrl != "" {
+				criteria["imageUrl"] = tt.imageUrl
+			}
+			if tt.imageDigest != "" {
+				criteria["imageDigest"] = tt.imageDigest
+			}
+			if tt.imageRef != "" {
+				criteria["imageRef"] = tt.imageRef
+			}
+			if tt.componentNames != nil {
+				componentNamesInterface := make([]interface{}, len(tt.componentNames))
+				for i, name := range tt.componentNames {
+					componentNamesInterface[i] = name
+				}
+				criteria["componentNames"] = componentNamesInterface
+			}
+
+			// Convert policy to unstructured for validation
+			obj := unstructured.Unstructured{}
+			obj.SetUnstructuredContent(map[string]interface{}{
+				"apiVersion": "appstudio.redhat.com/v1alpha1",
+				"kind":       "EnterpriseContractPolicy",
+				"metadata": map[string]interface{}{
+					"name": "test-policy",
+				},
+				"spec": map[string]interface{}{
+					"sources": []interface{}{
+						map[string]interface{}{
+							"volatileConfig": map[string]interface{}{
+								"exclude": []interface{}{criteria},
+							},
+						},
+					},
+				},
+			})
+
+			// Validate using custom resource strategy to include CEL validation
+			gvk := rts.GroupVersionKind{Group: "appstudio.redhat.com", Version: "v1alpha1", Kind: "EnterpriseContractPolicy"}
+			errs := customresource.NewStrategy(nil, false, gvk, validator, nil, s, nil, nil).Validate(context.Background(), &obj)
+
+			isValid := len(errs) == 0
+			if isValid != tt.wantValid {
+				t.Errorf("Validation = %v, want %v. Errors: %v", isValid, tt.wantValid, errs)
+			}
+		})
+	}
+}
+
 func TestComponentNamesField(t *testing.T) {
 	tests := []struct {
 		name           string

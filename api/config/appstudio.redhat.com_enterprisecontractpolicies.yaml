@@ -197,6 +197,9 @@ spec:
                               required:
                                 - value
                               type: object
+                              x-kubernetes-validations:
+                                - message: only one of imageUrl, imageDigest, imageRef, or componentNames may be set
+                                  rule: '(has(self.imageUrl) ? 1 : 0) + (has(self.imageDigest) ? 1 : 0) + (has(self.imageRef) ? 1 : 0) + (has(self.componentNames) ? 1 : 0) <= 1'
                             type: array
                           include:
                             description: |-
@@ -243,6 +246,9 @@ spec:
                               required:
                                 - value
                               type: object
+                              x-kubernetes-validations:
+                                - message: only one of imageUrl, imageDigest, imageRef, or componentNames may be set
+                                  rule: '(has(self.imageUrl) ? 1 : 0) + (has(self.imageDigest) ? 1 : 0) + (has(self.imageRef) ? 1 : 0) + (has(self.componentNames) ? 1 : 0) <= 1'
                             type: array
                         type: object
                     type: object

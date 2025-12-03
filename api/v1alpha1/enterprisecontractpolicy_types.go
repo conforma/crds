@@ -94,6 +94,7 @@ type SourceConfig struct {
 type ComponentName string
 
 // VolatileCriteria includes or excludes a policy rule with effective dates as an option.
+// +kubebuilder:validation:XValidation:rule="(has(self.imageUrl) ? 1 : 0) + (has(self.imageDigest) ? 1 : 0) + (has(self.imageRef) ? 1 : 0) + (has(self.componentNames) ? 1 : 0) <= 1",message="only one of imageUrl, imageDigest, imageRef, or componentNames may be set"
 type VolatileCriteria struct {
 	Value string `json:"value"`
 	// +optional
