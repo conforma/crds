@@ -90,7 +90,11 @@ type SourceConfig struct {
 	Include []string `json:"include,omitempty"`
 }
 
+// +kubebuilder:validation:MinLength=1
+type ComponentName string
+
 // VolatileCriteria includes or excludes a policy rule with effective dates as an option.
+// +kubebuilder:validation:XValidation:rule="(has(self.imageUrl) ? 1 : 0) + (has(self.imageDigest) ? 1 : 0) + (has(self.imageRef) ? 1 : 0) + (has(self.componentNames) ? 1 : 0) <= 1",message="only one of imageUrl, imageDigest, imageRef, or componentNames may be set"
 type VolatileCriteria struct {
 	Value string `json:"value"`
 	// +optional
@@ -115,6 +119,13 @@ type VolatileCriteria struct {
 	// +optional
 	// +kubebuilder:validation:Pattern=`^[a-z0-9][a-z0-9.-]*[a-z0-9](?:\/[a-z0-9][a-z0-9-]*[a-z0-9]){2,}$`
 	ImageUrl string `json:"imageUrl,omitempty"`
+
+	// ComponentNames is used to specify component names from
+	// ApplicationSnapshot. This allows filtering in scenarios where
+	// multiple components share the same image repository.
+	// +optional
+	// +listType=set
+	ComponentNames []ComponentName `json:"componentNames,omitempty"`
 
 	// Reference is used to include a link to related information such as a Jira issue URL.
 	// +optional

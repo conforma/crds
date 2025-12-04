@@ -159,6 +159,16 @@ spec:
                             items:
                               description: VolatileCriteria includes or excludes a policy rule with effective dates as an option.
                               properties:
+                                componentNames:
+                                  description: |-
+                                    ComponentNames is used to specify component names from
+                                    ApplicationSnapshot. This allows filtering in scenarios where
+                                    multiple components share the same image repository.
+                                  items:
+                                    minLength: 1
+                                    type: string
+                                  type: array
+                                  x-kubernetes-list-type: set
                                 effectiveOn:
                                   format: date-time
                                   type: string
@@ -187,6 +197,9 @@ spec:
                               required:
                                 - value
                               type: object
+                              x-kubernetes-validations:
+                                - message: only one of imageUrl, imageDigest, imageRef, or componentNames may be set
+                                  rule: '(has(self.imageUrl) ? 1 : 0) + (has(self.imageDigest) ? 1 : 0) + (has(self.imageRef) ? 1 : 0) + (has(self.componentNames) ? 1 : 0) <= 1'
                             type: array
                           include:
                             description: |-
@@ -195,6 +208,16 @@ spec:
                             items:
                               description: VolatileCriteria includes or excludes a policy rule with effective dates as an option.
                               properties:
+                                componentNames:
+                                  description: |-
+                                    ComponentNames is used to specify component names from
+                                    ApplicationSnapshot. This allows filtering in scenarios where
+                                    multiple components share the same image repository.
+                                  items:
+                                    minLength: 1
+                                    type: string
+                                  type: array
+                                  x-kubernetes-list-type: set
                                 effectiveOn:
                                   format: date-time
                                   type: string
@@ -223,6 +246,9 @@ spec:
                               required:
                                 - value
                               type: object
+                              x-kubernetes-validations:
+                                - message: only one of imageUrl, imageDigest, imageRef, or componentNames may be set
+                                  rule: '(has(self.imageUrl) ? 1 : 0) + (has(self.imageDigest) ? 1 : 0) + (has(self.imageRef) ? 1 : 0) + (has(self.componentNames) ? 1 : 0) <= 1'
                             type: array
                         type: object
                     type: object
