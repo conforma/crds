@@ -15,9 +15,6 @@ go.sum.backup
 .DS_Store
 Thumbs.db
 
-# Generated documentation
-docs/modules/ROOT/pages/reference.adoc
-
 # Test coverage reports
 *_cover.out
 cover.out
