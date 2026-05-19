@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   Checks:
@@ -40,7 +41,21 @@ jobs:
       - name: Test
         run: make test
 
-# Coverage reporting removed for now - can be added later if needed
+      - name: Upload API coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          use_oidc: true
+          flags: unit-tests
+          files: ./api_cover.out
+          fail_ci_if_error: false
+
+      - name: Upload schema coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          use_oidc: true
+          flags: unit-tests
+          files: ./schema_cover.out
+          fail_ci_if_error: false
 
       # If enterprisecontractpolicy_types.go is updated without a corresponding change to the crd
       # an uncommitted change can show.
