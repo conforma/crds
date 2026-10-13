@@ -15,6 +15,7 @@ jobs:
   info:
     name: Info
     runs-on: ubuntu-latest
+    if: github.repository == 'conforma/crds'
     outputs:
       head_sha: ${{ steps.head_sha.outputs.head_sha }}
       timestamp: ${{ steps.timestamp.outputs.timestamp }}
@@ -35,7 +36,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     needs: info
-    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == needs.info.outputs.head_sha) || github.event.workflow_dispatch }}
+    if: ${{ github.repository == 'conforma/crds' && ((github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == needs.info.outputs.head_sha) || github.event.workflow_dispatch) }}
 
     steps:
       - name: Checkout repository
