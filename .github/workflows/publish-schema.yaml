@@ -65,6 +65,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.repository == 'conforma/crds'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
