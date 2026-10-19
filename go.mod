@@ -3,7 +3,7 @@ module github.com/conforma/crds
 go 1.26.7
 
 require (
-	github.com/conforma/crds/api v0.0.0
+	github.com/conforma/crds/api v0.1.36
 	k8s.io/apimachinery v0.37.1
 	sigs.k8s.io/yaml v1.6.0
 )
