@@ -51,7 +51,7 @@ func TestArbitraryRuleDataEncode(t *testing.T) {
 		t.Fatalf("Unexpected error when encoding: %s", err)
 	}
 
-	expected := `{"metadata":{"creationTimestamp":null},"spec":{"sources":[{"ruleData":{"my":"data","here":14}}]},"status":{}}` + "\n"
+	expected := `{"metadata":{},"spec":{"sources":[{"ruleData":{"my":"data","here":14}}]},"status":{}}` + "\n"
 	got := out.String()
 	if got != expected {
 		t.Errorf("Expecting encoded to be: %s, but it was %s", expected, got)
@@ -143,7 +143,7 @@ func TestMultiplevolatileConfigWithSameValue(t *testing.T) {
 	}
 
 	gvk := rts.GroupVersionKind{Group: "appstudio.redhat.com", Version: "v1alpha1", Kind: "EnterpriseContractPolicy"}
-	errs := customresource.NewStrategy(nil, false, gvk, v, nil, s, nil, nil).Validate(context.Background(), &obj)
+	errs := customresource.NewStrategy(nil, false, gvk, v, nil, s, nil, nil, nil).Validate(context.Background(), &obj)
 
 	if len(errs) > 0 {
 		t.Errorf("did not expect validation errors: %v", errs)
@@ -489,7 +489,7 @@ func TestVolatileCriteriaMutualExclusivity(t *testing.T) {
 
 			// Validate using custom resource strategy to include CEL validation
 			gvk := rts.GroupVersionKind{Group: "appstudio.redhat.com", Version: "v1alpha1", Kind: "EnterpriseContractPolicy"}
-			errs := customresource.NewStrategy(nil, false, gvk, validator, nil, s, nil, nil).Validate(context.Background(), &obj)
+			errs := customresource.NewStrategy(nil, false, gvk, validator, nil, s, nil, nil, nil).Validate(context.Background(), &obj)
 
 			isValid := len(errs) == 0
 			if isValid != tt.wantValid {
