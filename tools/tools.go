@@ -23,5 +23,5 @@ import (
 	_ "github.com/elastic/crd-ref-docs"
 	_ "sigs.k8s.io/controller-runtime/tools/setup-envtest"
 	_ "sigs.k8s.io/controller-tools/cmd/controller-gen"
-	_ "sigs.k8s.io/kustomize/kustomize/v4"
+	_ "sigs.k8s.io/kustomize/kustomize/v5"
 )
