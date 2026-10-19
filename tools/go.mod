@@ -4,7 +4,7 @@ go 1.26.7
 
 require (
 	github.com/elastic/crd-ref-docs v0.3.0
-	sigs.k8s.io/controller-runtime/tools/setup-envtest v0.0.0-20221124082817-e57ce7861d5a
+	sigs.k8s.io/controller-runtime/tools/setup-envtest v0.25.2
 	sigs.k8s.io/controller-tools v0.23.0
 	sigs.k8s.io/kustomize/kustomize/v5 v5.8.2
 )
@@ -51,7 +51,7 @@ require (
 	github.com/monochromegane/go-gitignore v0.0.0-20200626010858-205db1a8cc00 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
-	github.com/spf13/afero v1.6.0 // indirect
+	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
