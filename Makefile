@@ -3,7 +3,7 @@
 ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 CONTROLLER_GEN = go run -modfile $(ROOT)tools/go.mod sigs.k8s.io/controller-tools/cmd/controller-gen
-KUSTOMIZE = go run -modfile $(ROOT)tools/go.mod sigs.k8s.io/kustomize/kustomize/v4
+KUSTOMIZE = go run -modfile $(ROOT)tools/go.mod sigs.k8s.io/kustomize/kustomize/v5
 CRD_DEF = ./api/v1alpha1
 
 # Setting SHELL to bash allows bash commands to be executed by recipes.

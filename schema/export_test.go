@@ -5,14 +5,24 @@ import (
 	"testing"
 
 	v1alpha1 "github.com/conforma/crds/api/v1alpha1"
-	"github.com/santhosh-tekuri/jsonschema/v5"
+	"github.com/santhosh-tekuri/jsonschema/v6"
 	v1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 )
 
 func TestJsonAdditionalProperties(t *testing.T) {
-	schema, err := jsonschema.CompileString("schema.json", v1alpha1.Schema)
+	var schemaDoc any
+	if err := json.Unmarshal([]byte(v1alpha1.Schema), &schemaDoc); err != nil {
+		t.Fatalf("unable to decode the schema for v1alpha1: %v", err)
+	}
+
+	compiler := jsonschema.NewCompiler()
+	if err := compiler.AddResource("schema.json", schemaDoc); err != nil {
+		t.Fatalf("unable to add schema for v1alpha1: %v", err)
+	}
+
+	schema, err := compiler.Compile("schema.json")
 	if err != nil {
-		t.Errorf("unable to compile the schema for v1alpha1: %v", err)
+		t.Fatalf("unable to compile the schema for v1alpha1: %v", err)
 	}
 
 	ruleData := []byte(`{"any": "value"}`)
