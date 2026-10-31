@@ -3,7 +3,7 @@ module github.com/conforma/crds/schema
 go 1.26.7
 
 require (
-	github.com/conforma/crds/api v0.1.36
+	github.com/conforma/crds/api v0.1.40
 	github.com/invopop/jsonschema v0.14.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.3
 )
