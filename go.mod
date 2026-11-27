@@ -1,6 +1,6 @@
 module github.com/conforma/crds
 
-go 1.26.7
+go 1.26.10
 
 require (
 	github.com/conforma/crds/api v0.1.36

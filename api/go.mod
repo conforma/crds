@@ -1,6 +1,6 @@
 module github.com/conforma/crds/api
 
-go 1.26.7 // allow
+go 1.26.10 // allow
 
 require (
 	k8s.io/apiextensions-apiserver v0.37.1
