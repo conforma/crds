@@ -1,6 +1,6 @@
 module github.com/conforma/crds/schema
 
-go 1.26.7
+go 1.26.10
 
 require (
 	github.com/conforma/crds/api v0.1.36
@@ -27,7 +27,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/spf13/afero v1.15.0
-	golang.org/x/net v0.61.0 // indirect
+	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	k8s.io/apiextensions-apiserver v0.37.1
